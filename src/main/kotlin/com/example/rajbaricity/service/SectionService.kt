@@ -4,8 +4,5 @@ import com.example.rajbaricity.model.Section
 
 interface SectionService {
     fun getSections(): List<Section>
-<<<<<<< HEAD
     fun saveSection(section: Section): Section
-=======
->>>>>>> oldrepo/master
 }

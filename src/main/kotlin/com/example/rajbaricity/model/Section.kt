@@ -1,7 +1,6 @@
 package com.example.rajbaricity.model
 
 import jakarta.persistence.*
-
 @Entity
 @Table(name = "sections")
 data class Section(

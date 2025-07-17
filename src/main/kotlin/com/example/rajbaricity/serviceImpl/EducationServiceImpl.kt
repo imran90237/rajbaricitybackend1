@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service
 class EducationServiceImpl(
     private val educationRepository: EducationRepository
 ) : EducationService {
-<<<<<<< HEAD
 
     override fun getAllEducation(): List<Education> = educationRepository.findAll()
 
@@ -29,7 +28,4 @@ class EducationServiceImpl(
             true
         } else false
     }
-=======
-    override fun getAllEducation(): List<Education> = educationRepository.getAllEducationInfo()
->>>>>>> oldrepo/master
 }

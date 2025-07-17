@@ -1,8 +1,7 @@
 package com.example.rajbaricity.repository
-
-import com.example.rajbaricity.model.Education
+import com.example.rajbaricity.model.BloodDonor
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface EducationRepository : JpaRepository<Education, Long>
+interface BloodDonorRepository : JpaRepository<BloodDonor, Long>

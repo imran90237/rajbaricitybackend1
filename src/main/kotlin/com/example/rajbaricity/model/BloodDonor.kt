@@ -3,18 +3,21 @@ package com.example.rajbaricity.model
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "sections")
-data class Section(
+@Table(name = "donors")
+data class BloodDonor(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
     @Column(nullable = false)
-    val title: String,
+    val name: String = "",
 
     @Column(nullable = false)
-    val icon: String,
+    val bloodGroup: String = "",
 
-    @Column(nullable = false, unique = true)
-    val route: String
+    val donationDate: String = "",
+
+    val address: String = "",
+
+    val phone: String = ""
 )

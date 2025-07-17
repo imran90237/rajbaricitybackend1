@@ -9,12 +9,8 @@ import org.springframework.stereotype.Service
 class SectionServiceImpl(
     private val sectionRepository: SectionRepository
 ) : SectionService {
-<<<<<<< HEAD
 
     override fun getSections(): List<Section> = sectionRepository.findAll()
 
     override fun saveSection(section: Section): Section = sectionRepository.save(section)
-=======
-    override fun getSections(): List<Section> = sectionRepository.getAllSections()
->>>>>>> oldrepo/master
 }
