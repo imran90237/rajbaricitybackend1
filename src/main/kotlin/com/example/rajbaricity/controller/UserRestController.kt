@@ -12,21 +12,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/users")
 class UserRestController(private val userService: UserService) {
 
-    // The new registration flow starts with sending a verification code.
-    // The old direct register endpoint is commented out in favor of the new flow.
-    /*
-    @PostMapping("/register")
-    fun register(@RequestBody user: User): ResponseEntity<String> {
-        val registeredUser = userService.registerUser(user)
-        return if (registeredUser != null) {
-            ResponseEntity.ok("Registration successful. Please check your email for a verification code.")
-        } else {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already registered.")
-        }
-    }
-    */
-
-    // Step 1: Send verification code to user's email
+    // Step 1: Client sends user details to get a verification code.
+    // The backend saves the user as 'unverified'.
     @PostMapping("/send-verification")
     fun sendVerificationCode(@RequestBody user: User): ResponseEntity<String> {
         val sent = userService.sendVerificationCode(user)
@@ -38,18 +25,18 @@ class UserRestController(private val userService: UserService) {
         }
     }
 
-    // Step 2: Verify the code and complete registration
+    // Step 2: Client sends email and code. If valid, the user is marked as 'verified'.
     @PostMapping("/verify-and-register")
     fun verifyAndRegister(@RequestBody verificationRequest: VerificationRequest): ResponseEntity<Any> {
         val user = userService.verifyAndRegister(verificationRequest)
         return if (user != null) {
             ResponseEntity.ok(user)
         } else {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired code, or email already exists.")
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired code.")
         }
     }
 
-    // Login with email/phone and password
+    // Login with email and password for verified users
     @PostMapping("/login")
     fun login(@RequestParam email: String, @RequestParam password: String): ResponseEntity<Any> {
         val user = userService.login(email, password)

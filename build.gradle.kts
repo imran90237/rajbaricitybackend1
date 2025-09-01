@@ -36,15 +36,17 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 
 	// Retrofit and OkHttp dependencies
 	implementation("com.squareup.retrofit2:retrofit:2.9.0")
 	implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-	implementation("com.squareup.okhttp3:okhttp:4.10.0")
+	implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	runtimeOnly("com.mysql:mysql-connector-j")
+
 	runtimeOnly("com.h2database:h2") // Optional, for testing
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

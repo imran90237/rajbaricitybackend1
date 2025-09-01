@@ -6,6 +6,7 @@ import com.example.rajbaricity.model.VerificationRequest
 import com.example.rajbaricity.repository.OtpCodeRepository
 import com.example.rajbaricity.repository.UserRepository
 import com.example.rajbaricity.service.UserService
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -15,29 +16,13 @@ import kotlin.random.Random
 @Transactional
 class UserServiceImpl(
     private val userRepository: UserRepository,
-    private val otpCodeRepository: OtpCodeRepository
+    private val otpCodeRepository: OtpCodeRepository,
+    private val passwordEncoder: PasswordEncoder
 ) : UserService {
-
-    override fun registerUser(user: User): User? {
-        if (userRepository.existsByEmail(user.email)) return null
-        return userRepository.save(user)
-    }
 
     override fun login(email: String, password: String): User? {
         val user = userRepository.findByEmail(email)
-        return user?.takeIf { it.password == password && it.verified }
-    }
-
-    override fun verifyUser(userId: Long): Boolean {
-        val userOpt = userRepository.findById(userId)
-        return if (userOpt.isPresent) {
-            val user = userOpt.get()
-            user.verified = true
-            userRepository.save(user)
-            true
-        } else {
-            false
-        }
+        return user?.takeIf { passwordEncoder.matches(password, it.password) && it.verified }
     }
 
     override fun getAllUsers(): List<User> = userRepository.findAll()
@@ -78,6 +63,7 @@ class UserServiceImpl(
         return if (isValid) {
             val newUser = User(
                 email = verificationRequest.email,
+                password = passwordEncoder.encode(verificationRequest.password),
                 verified = true
             )
             userRepository.save(newUser)
