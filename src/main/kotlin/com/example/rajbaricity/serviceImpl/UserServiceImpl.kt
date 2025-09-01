@@ -77,9 +77,7 @@ class UserServiceImpl(
 
         return if (isValid) {
             val newUser = User(
-                username = verificationRequest.username,
                 email = verificationRequest.email,
-                password = verificationRequest.password, // Remember to hash passwords in a real app!
                 verified = true
             )
             userRepository.save(newUser)
