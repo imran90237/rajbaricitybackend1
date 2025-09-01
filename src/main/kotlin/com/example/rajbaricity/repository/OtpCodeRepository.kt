@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface OtpCodeRepository : JpaRepository<OtpCode, Long> {
-    fun findTopByPhoneOrderByCreatedAtDesc(phone: String): Optional<OtpCode>
+    fun findTopByEmailOrderByCreatedAtDesc(email: String): Optional<OtpCode>
 }

@@ -2,6 +2,7 @@ package com.example.rajbaricity.serviceImpl
 
 import com.example.rajbaricity.model.OtpCode
 import com.example.rajbaricity.model.User
+import com.example.rajbaricity.model.VerificationRequest
 import com.example.rajbaricity.repository.OtpCodeRepository
 import com.example.rajbaricity.repository.UserRepository
 import com.example.rajbaricity.service.UserService
@@ -17,32 +18,14 @@ class UserServiceImpl(
     private val otpCodeRepository: OtpCodeRepository
 ) : UserService {
 
-    override fun registerUser(user: User): Boolean {
-        user.email?.let {
-            if (userRepository.existsByEmail(it)) return false
-        }
-        user.phone?.let {
-            if (userRepository.existsByPhone(it)) return false
-        }
-
-        userRepository.save(user)
-
-        // Send verification code to contact (phone or email) after registration
-        val contact = user.phone ?: user.email
-        contact?.let {
-            sendVerificationCode(it)
-        }
-
-        return true
+    override fun registerUser(user: User): User? {
+        if (userRepository.existsByEmail(user.email)) return null
+        return userRepository.save(user)
     }
 
-    override fun login(input: String, password: String): User? {
-        val user = when {
-            "@" in input -> userRepository.findByEmail(input)
-            input.all { it.isDigit() } -> userRepository.findByPhone(input)
-            else -> userRepository.findByUsername(input)
-        }
-        return user?.takeIf { it.password == password }
+    override fun login(email: String, password: String): User? {
+        val user = userRepository.findByEmail(email)
+        return user?.takeIf { it.password == password && it.verified }
     }
 
     override fun verifyUser(userId: Long): Boolean {
@@ -61,33 +44,48 @@ class UserServiceImpl(
 
     override fun getUserById(id: Long): User? = userRepository.findById(id).orElse(null)
 
-    override fun sendVerificationCode(contact: String): Boolean {
+    override fun sendVerificationCode(user: User): Boolean {
+        // Prevent sending code if user already exists and is verified
+        if (userRepository.existsByEmail(user.email)) {
+            val existingUser = userRepository.findByEmail(user.email)
+            if (existingUser?.verified == true) {
+                return false
+            }
+        }
+
         val code = generateOtp()
         val message = "Your verification code is: $code"
 
-        val sent = if (contact.contains("@")) {
-            sendEmail(contact, message)
-        } else {
-            sendSMS(contact, message)
-        }
+        val sent = sendEmail(user.email, message)
 
         if (sent) {
-            otpCodeRepository.save(OtpCode(phone = contact, code = code, createdAt = LocalDateTime.now()))
+            otpCodeRepository.save(OtpCode(email = user.email, code = code, createdAt = LocalDateTime.now()))
             return true
         }
         return false
     }
 
-    override fun verifyCode(contact: String, code: String): Boolean {
-        val otpOpt = otpCodeRepository.findTopByPhoneOrderByCreatedAtDesc(contact)
-        return otpOpt.map {
-            !it.isExpired() && it.code == code
-        }.orElse(false)
-    }
+    override fun verifyAndRegister(verificationRequest: VerificationRequest): User? {
+        if (userRepository.existsByEmail(verificationRequest.email)) {
+            return null // User already exists
+        }
 
-    private fun sendSMS(phone: String, message: String): Boolean {
-        println("Sending SMS to $phone: $message") // এখানে বাস্তব SMS API ইন্টিগ্রেট করুন
-        return true
+        val otpOpt = otpCodeRepository.findTopByEmailOrderByCreatedAtDesc(verificationRequest.email)
+        val isValid = otpOpt.map {
+            !it.isExpired() && it.code == verificationRequest.code
+        }.orElse(false)
+
+        return if (isValid) {
+            val newUser = User(
+                username = verificationRequest.username,
+                email = verificationRequest.email,
+                password = verificationRequest.password, // Remember to hash passwords in a real app!
+                verified = true
+            )
+            userRepository.save(newUser)
+        } else {
+            null
+        }
     }
 
     private fun sendEmail(email: String, message: String): Boolean {
