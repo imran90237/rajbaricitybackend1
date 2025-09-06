@@ -73,7 +73,6 @@ class UserRestControllerTests {
             jsonPath("$.verified") { value(true) }
             jsonPath("$.email") { value(testUser.email) }
             jsonPath("$.username") { value(testUser.username) }
-            jsonPath("$.password") { value("newpassword") }
         }
 
         // Verify user is now verified

@@ -25,7 +25,18 @@ class UserServiceImpl(
 
     override fun login(email: String, password: String): User? {
         logger.info("Attempting login for email: {}", email)
-        val user = userRepository.findByEmail(email)
+        var user = userRepository.findByEmail(email)
+        if (user == null) {
+            val correctedEmail = correctEmailTypo(email)
+            if (correctedEmail != email) {
+                logger.info("Original email not found. Trying corrected email: {}", correctedEmail)
+                user = userRepository.findByEmail(correctedEmail)
+                if (user != null) {
+                    logger.info("User found with corrected email: {}", correctedEmail)
+                }
+            }
+        }
+
         if (user == null) {
             logger.warn("Login failed: No user found for email: {}", email)
             return null
@@ -40,6 +51,17 @@ class UserServiceImpl(
         }
         logger.warn("Login failed: Invalid password for email: {}", email)
         return null
+    }
+
+    private fun correctEmailTypo(email: String): String {
+        val parts = email.split("@")
+        if (parts.size == 2) {
+            val domain = parts[1]
+            if (domain.equals("gmal.com", ignoreCase = true)) {
+                return parts[0] + "@gmail.com"
+            }
+        }
+        return email
     }
 
     override fun getAllUsers(): List<User> = userRepository.findAll()
