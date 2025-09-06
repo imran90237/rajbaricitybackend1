@@ -1,5 +1,6 @@
 package com.example.rajbaricity.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
 
 @Entity
@@ -12,9 +13,13 @@ data class User(
     @Column(nullable = false, unique = true)
     val username: String = "",
 
+    @Column(nullable = false)
+    val name: String = "",
+
     @Column(nullable = false, unique = true)
     val email: String = "",
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     var password: String = "",
 
@@ -24,5 +29,4 @@ data class User(
     @Column(nullable = false)
     var verified: Boolean = false  // ইমেইল বা ফোন ভেরিফিকেশন ফ্ল্যাগ
 )
-
 
