@@ -15,5 +15,12 @@ data class OtpCode(
     val code: String = "",
     val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
-    fun isExpired(): Boolean = createdAt.plusMinutes(5).isBefore(LocalDateTime.now())
+    /**
+     * Checks if the OTP has expired.
+     * An OTP is considered expired if the current time is after 5 minutes from its creation time.
+     */
+    fun isExpired(): Boolean {
+        val expirationTime = createdAt.plusMinutes(5)
+        return LocalDateTime.now().isAfter(expirationTime)
+    }
 }

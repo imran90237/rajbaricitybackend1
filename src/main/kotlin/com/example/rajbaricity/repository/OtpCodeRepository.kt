@@ -6,4 +6,6 @@ import java.util.*
 
 interface OtpCodeRepository : JpaRepository<OtpCode, Long> {
     fun findTopByEmailOrderByCreatedAtDesc(email: String): Optional<OtpCode>
+    fun findByEmail(email: String): Optional<OtpCode>
+    fun deleteByEmail(email: String)
 }
