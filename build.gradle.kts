@@ -37,6 +37,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-mail")
 
 	// Retrofit and OkHttp dependencies
 	implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -46,6 +47,7 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	runtimeOnly("com.mysql:mysql-connector-j")
+
 
 	runtimeOnly("com.h2database:h2") // Optional, for testing
 

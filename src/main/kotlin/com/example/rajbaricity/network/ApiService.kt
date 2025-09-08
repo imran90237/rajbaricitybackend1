@@ -3,9 +3,11 @@ package com.example.rajbaricity.network
 import com.example.rajbaricity.model.User
 import com.example.rajbaricity.model.VerificationRequest
 import okhttp3.ResponseBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiService {
     @POST("api/users/register")
@@ -16,4 +18,7 @@ interface ApiService {
 
     @POST("api/users/verify-and-register")
     suspend fun verifyAndRegister( @Body verificationRequest: VerificationRequest): Response<ResponseBody>
+
+    @POST("api/send-email")
+    fun sendEmail(@Query("to") to: String, @Query("subject") subject: String, @Query("text") text: String): Call<Void>
 }

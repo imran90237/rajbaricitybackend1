@@ -24,9 +24,9 @@ class UserRestController(private val userService: UserService) {
             if (sent) {
                 ResponseEntity.ok(mapOf("message" to "Verification code sent to ${user.email}."))
             } else {
-                // This case now specifically means the user exists and is verified.
+                // This case now specifically means the user exists.
                 ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(mapOf("message" to "This email is already registered and verified."))
+                    .body(mapOf("message" to "This email is already registered."))
             }
         } catch (e: Exception) {
             logger.error("Error in /send-verification for email {}: {}", user.email, e.message)

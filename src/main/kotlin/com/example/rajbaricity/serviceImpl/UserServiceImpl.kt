@@ -5,6 +5,7 @@ import com.example.rajbaricity.model.User
 import com.example.rajbaricity.model.VerificationRequest
 import com.example.rajbaricity.repository.OtpCodeRepository
 import com.example.rajbaricity.repository.UserRepository
+import com.example.rajbaricity.service.EmailService
 import com.example.rajbaricity.service.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -18,7 +19,8 @@ import kotlin.random.Random
 class UserServiceImpl(
     private val userRepository: UserRepository,
     private val otpCodeRepository: OtpCodeRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val emailService: EmailService
 ) : UserService {
 
     private val logger = LoggerFactory.getLogger(UserServiceImpl::class.java)
@@ -78,21 +80,30 @@ class UserServiceImpl(
         }
 
         val code = generateOtp()
-        val message = "Your verification code is: $code"
 
-        // In a real application, this would use an email service.
-        val sent = sendEmail(user.email, message)
-
-        if (sent) {
+        try {
+            emailService.sendOtpEmail(user.email, code)
             // Remove old code if it exists
             otpCodeRepository.findByEmail(user.email).ifPresent { otpCodeRepository.delete(it) }
             // Save the new code
             otpCodeRepository.save(OtpCode(email = user.email, code = code, createdAt = LocalDateTime.now()))
             logger.info("Verification code {} sent to {} and saved to database.", code, user.email)
+
+            // Save the new user with verified = false
+            val newUser = User(
+                username = user.username,
+                email = user.email,
+                password = passwordEncoder.encode(user.password), // It's better to encode password here
+                verified = false
+            )
+            userRepository.save(newUser)
+            logger.info("User {} saved to database with verified = false.", newUser.email)
+
             return true
+        } catch (e: Exception) {
+            logger.error("Failed to send verification email to {}", user.email, e)
+            return false
         }
-        logger.error("Failed to send verification email to {}", user.email)
-        return false
     }
 
     override fun verifyAndRegister(verificationRequest: VerificationRequest): User? {
@@ -153,12 +164,6 @@ class UserServiceImpl(
             return null
 
         }
-    }
-
-    private fun sendEmail(email: String, message: String): Boolean {
-        // This is a placeholder. Integrate a real email sending service here.
-        logger.info("Sending Email to {}: {}", email, message)
-        return true
     }
 
     private fun generateOtp(): String {
