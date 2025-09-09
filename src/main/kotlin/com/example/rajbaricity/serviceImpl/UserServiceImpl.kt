@@ -138,11 +138,8 @@ class UserServiceImpl(
             return savedUser
         } catch (e: Exception) {
             logger.error("An unexpected error occurred during registration for email: {}", verificationRequest.email, e)
-            // Re-throwing the exception is often a good practice in service layers,
-            // allowing a global exception handler to manage the final response.
-            // However, for now, we'll return null as per the original function signature.
-            return null
-
+            // Re-throwing the exception to allow for proper transaction rollback.
+            throw e
         }
     }
 
