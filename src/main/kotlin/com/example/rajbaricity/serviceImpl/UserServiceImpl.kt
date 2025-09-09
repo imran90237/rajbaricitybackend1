@@ -72,12 +72,6 @@ class UserServiceImpl(
 
     override fun sendVerificationCode(user: User): Boolean {
         logger.info("Received request to send verification code to email: {}", user.email)
-        userRepository.findByEmail(user.email)?.let {
-            if (it.verified) {
-                logger.warn("User with email {} already exists and is verified. Aborting.", user.email)
-                return false
-            }
-        }
 
         val code = generateOtp()
 
@@ -89,20 +83,10 @@ class UserServiceImpl(
             otpCodeRepository.save(OtpCode(email = user.email, code = code, createdAt = LocalDateTime.now()))
             logger.info("Verification code {} sent to {} and saved to database.", code, user.email)
 
-            // Save the new user with verified = false
-            val newUser = User(
-                username = user.username,
-                email = user.email,
-                password = passwordEncoder.encode(user.password), // It's better to encode password here
-                verified = false
-            )
-            userRepository.save(newUser)
-            logger.info("User {} saved to database with verified = false.", newUser.email)
-
             return true
         } catch (e: Exception) {
             logger.error("Failed to send verification email to {}", user.email, e)
-            return false
+            throw e
         }
     }
 
