@@ -3,7 +3,7 @@ package com.example.rajbaricity.model
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "donors")
+@Table(name = "BloodDonor")
 data class BloodDonor(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
