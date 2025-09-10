@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/blood-requests")
+@RequestMapping("/api/blood_requests")
 @CrossOrigin(origins = ["*"]) // Allow all origins for testing
 class BloodRequestRestController(
     private val service: BloodRequestService
