@@ -13,10 +13,10 @@ data class Bustime(
     val busName: String = "",
 
     @Column(name = "from_location")
-    val from: String = "",
+    val fromLocation: String = "",
 
     @Column(name = "to_location")
-    val to: String = "",
+    val toLocation: String = "",
 
     val time: String = "",
     val contact: String = ""

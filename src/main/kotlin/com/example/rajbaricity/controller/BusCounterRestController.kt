@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/bus-counter")
+@RequestMapping("/api/bus_counter")
 class BusCounterRestController(private val repository: BusCounterRepository) {
 
     @GetMapping
