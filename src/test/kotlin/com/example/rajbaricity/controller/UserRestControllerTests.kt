@@ -47,6 +47,9 @@ class UserRestControllerTests {
 
     @Test
     fun `should register and verify a new user`() {
+        // Step 0: Create a user first
+        userRepository.save(testUser.copy(verified = false))
+
         // Step 1: Send verification code
         mockMvc.post("/api/users/send-verification") {
             contentType = MediaType.APPLICATION_JSON

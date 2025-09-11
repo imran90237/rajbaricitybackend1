@@ -5,9 +5,12 @@ import com.example.rajbaricity.service.CarInfoService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
+
 @RestController
 @RequestMapping("/api/cars")
-class CarInfoRestController(
+class
+
+CarInfoRestController(
     private val carInfoService: CarInfoService
 ) {
 
