@@ -14,9 +14,8 @@ data class MadrasaInfo(
     val established: String = "",
     val features: String = "",
     val mapUrl: String = "",
+    val type: String =""// "Qawmi" or "Alia"
 
     // You cannot store Uri or Drawable in DB; imageUri and imageRes are only for UI, not DB
     // Remove or ignore them from the entity
-) {
-    constructor() : this(0, "", "", "", "") // 👈 Required default constructor
-}
+)

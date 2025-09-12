@@ -6,33 +6,12 @@ import com.example.rajbaricity.service.MadrasaInfoService
 import org.springframework.stereotype.Service
 
 @Service
-class MadrasaInfoServiceImpl(
-    private val repository: MadrasaInfoRepository
-) : MadrasaInfoService {
+class MadrasaInfoServiceImpl(private val repository: MadrasaInfoRepository) : MadrasaInfoService {
+    override fun getAll(): List<MadrasaInfo> = repository.findAll()
 
-    override fun save(madrasaInfo: MadrasaInfo): MadrasaInfo {
-        return repository.save(madrasaInfo)
-    }
+    override fun getById(id: Long): MadrasaInfo? = repository.findById(id).orElse(null)
 
-    override fun getAll(): List<MadrasaInfo> {
-        return repository.findAll()
-    }
+    override fun save(info: MadrasaInfo): MadrasaInfo = repository.save(info)
 
-    override fun getById(id: Long): MadrasaInfo? {
-        return repository.findById(id).orElse(null)
-    }
-
-    override fun update(id: Long, updated: MadrasaInfo): MadrasaInfo? {
-        return if (repository.existsById(id)) {
-            val toUpdate = updated.copy(id = id)
-            repository.save(toUpdate)
-        } else null
-    }
-
-    override fun delete(id: Long): Boolean {
-        return if (repository.existsById(id)) {
-            repository.deleteById(id)
-            true
-        } else false
-    }
+    override fun delete(id: Long) = repository.deleteById(id)
 }
