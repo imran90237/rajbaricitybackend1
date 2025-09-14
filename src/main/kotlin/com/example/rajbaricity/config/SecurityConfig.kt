@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
@@ -19,13 +20,13 @@ class SecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http
-            .csrf { it.disable() } // CSRF সুরক্ষা নিষ্ক্রিয় করুন
-            .authorizeHttpRequests { auth ->
-                auth
-                    .requestMatchers("/api/**").permitAll() // /api/ দিয়ে শুরু সব URL অনুমতি দিন
-                    .anyRequest().authenticated() // বাকি সব URL এর জন্য authentication লাগবে
+        http {
+            csrf { disable() } // CSRF প্রোটেকশন নিষ্ক্রিয় করা হয়েছে
+            authorizeHttpRequests {
+                authorize("/api/**", permitAll) // /api/ পাথের সব রিকোয়েস্ট অনুমতি দেওয়া হয়েছে
+                authorize(anyRequest, authenticated)
             }
+        }
         return http.build()
     }
 }

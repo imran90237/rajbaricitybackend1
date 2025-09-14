@@ -2,8 +2,13 @@ package com.example.rajbaricity.controller
 
 import com.example.rajbaricity.model.Hospital
 import com.example.rajbaricity.service.HospitalService
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.*
 
 @RestController
 @RequestMapping("/api/hospitals")
@@ -36,5 +41,18 @@ class HospitalRestController(
     fun delete(@PathVariable id: Long): ResponseEntity<Void> {
         return if (service.delete(id)) ResponseEntity.noContent().build()
         else ResponseEntity.notFound().build()
+    }
+
+    @PostMapping("/upload")
+    fun uploadImage(@RequestParam("image") file: MultipartFile, request: HttpServletRequest): ResponseEntity<Map<String, String>> {
+        val fileName = "${UUID.randomUUID()}-${file.originalFilename}"
+        val path = Paths.get("uploads", fileName)
+        Files.copy(file.inputStream, path)
+
+        // Construct the base URL from the request
+        val baseUrl = request.scheme + "://" + request.serverName + ":" + request.serverPort
+        val fileUrl = "$baseUrl/uploads/$fileName"
+
+        return ResponseEntity.ok(mapOf("url" to fileUrl))
     }
 }

@@ -27,5 +27,8 @@ data class Hospital(
 
     var mapUrl: String = "",
 
-    var photoUrl: String = "" // You can save a URL or relative path
+    var photoUrl: String = "", // You can save a URL or relative path
+
+    @Column(nullable = false)
+    var type: String = ""
 )
