@@ -20,6 +20,7 @@ class NurseryRestController(private val nurseryService: NurseryService) {
     }
 
     @GetMapping("/{id}")
+
     fun getNurseryById(@PathVariable id: Long): ResponseEntity<Nursery> {
         val nursery = nurseryService.getNurseryById(id)
         return if (nursery != null) ResponseEntity.ok(nursery)
