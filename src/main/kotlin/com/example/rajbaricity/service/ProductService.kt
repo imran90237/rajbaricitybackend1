@@ -1,9 +1,9 @@
 package com.example.rajbaricity.service
-import com.example.rajbaricity.model.Product
+import com.example.rajbaricity.model.Shopping
 
 interface ProductService {
-    fun getAll(): List<Product>
-    fun getByType(isNew: Boolean): List<Product>
-    fun search(query: String): List<Product>
-    fun save(product: Product): Product
+    fun getAll(): List<Shopping>
+    fun getByType(isNew: Boolean): List<Shopping>
+    fun search(query: String): List<Shopping>
+    fun save(product: Shopping): Shopping
 }
