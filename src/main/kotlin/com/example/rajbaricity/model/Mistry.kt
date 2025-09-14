@@ -27,8 +27,7 @@ data class Mistry(
     var specialtyWork: String = "",
 
     var chamber1: String = "",
-    var chamber2: String = "",
-    var chamber3: String = "",
+
 
     @Column(nullable = false)
     var phone: String = ""
