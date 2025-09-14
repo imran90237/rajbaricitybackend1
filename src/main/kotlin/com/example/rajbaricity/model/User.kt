@@ -29,4 +29,3 @@ data class User(
     @Column(nullable = false)
     var verified: Boolean = false  // ইমেইল বা ফোন ভেরিফিকেশন ফ্ল্যাগ
 )
-
