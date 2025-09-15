@@ -11,14 +11,22 @@ data class LostAndFound(
     val id: Long = 0,
 
     @Column(nullable = false)
-    val itemName: String = "",
+    val title: String = "",
 
     @Column(nullable = false)
-    val personName: String = "",
+    val description: String = "",
 
     @Column(nullable = false)
-    val phone: String = "",
+    val contactName: String = "",
+
 
     @Column(nullable = false)
-    val status: String = "" // Should be "LOST" or "FOUND"
+    val contactPhone: String = "",
+
+    val photoUrl: String = "",
+
+    val status: String = "LOST" // Should be "LOST" or "FOUND"
 )
+
+
+
