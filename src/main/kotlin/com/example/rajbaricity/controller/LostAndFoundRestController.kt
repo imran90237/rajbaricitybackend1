@@ -1,6 +1,6 @@
 package com.example.rajbaricity.controller
 
-import com.example.rajbaricity.model.LostAndFoundItem
+import com.example.rajbaricity.model.LostAndFound
 import com.example.rajbaricity.service.LostAndFoundService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -12,26 +12,26 @@ class LostAndFoundRestController(
 ) {
 
     @PostMapping
-    fun create(@RequestBody item: LostAndFoundItem): LostAndFoundItem =
+    fun create(@RequestBody item: LostAndFound): LostAndFound =
         service.save(item)
 
     @GetMapping
-    fun getAll(): List<LostAndFoundItem> =
+    fun getAll(): List<LostAndFound> =
         service.getAll()
 
     @GetMapping("/status/{status}")
-    fun getByStatus(@PathVariable status: String): List<LostAndFoundItem> =
+    fun getByStatus(@PathVariable status: String): List<LostAndFound> =
         service.getAllByStatus(status)
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Long): ResponseEntity<LostAndFoundItem> {
+    fun getById(@PathVariable id: Long): ResponseEntity<LostAndFound> {
         val item = service.getById(id)
         return if (item != null) ResponseEntity.ok(item)
         else ResponseEntity.notFound().build()
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody updated: LostAndFoundItem): ResponseEntity<LostAndFoundItem> {
+    fun update(@PathVariable id: Long, @RequestBody updated: LostAndFound): ResponseEntity<LostAndFound> {
         val result = service.update(id, updated)
         return if (result != null) ResponseEntity.ok(result)
         else ResponseEntity.notFound().build()

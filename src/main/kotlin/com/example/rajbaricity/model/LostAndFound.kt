@@ -4,7 +4,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "lost_and_found_items")
-data class LostAndFoundItem(
+data class LostAndFound(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
