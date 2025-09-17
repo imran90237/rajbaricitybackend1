@@ -23,7 +23,7 @@ class StudentRestController(
 
     @PostMapping
     fun createStudent(@RequestBody student: StudentEntity): ResponseEntity<StudentEntity> {
-        val savedStudent = studentService.saveStudent(student)
+        val savedStudent = studentService.saveStudent(student.copy(id = null))
         return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent)
     }
 
