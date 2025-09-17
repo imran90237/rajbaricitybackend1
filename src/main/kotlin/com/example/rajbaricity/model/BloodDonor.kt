@@ -19,5 +19,6 @@ data class BloodDonor(
 
     val address: String = "",
 
+    @Column(nullable = false)
     val phone: String = ""
 )

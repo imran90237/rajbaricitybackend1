@@ -16,6 +16,7 @@ data class BloodRequest(
 
     val bagCount: String = "",
     val dateTime: String = "",
+    @Column(nullable = false)
     val phone: String = "",
     val hospital: String = "",
     val details: String = ""
