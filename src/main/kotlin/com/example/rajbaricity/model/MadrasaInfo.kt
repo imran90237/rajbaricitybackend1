@@ -10,6 +10,7 @@ data class MadrasaInfo(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
+    @Column(nullable = false)
     val name: String = "",
     val established: String = "",
     val features: String = "",

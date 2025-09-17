@@ -9,6 +9,7 @@ data class SchoolInfo(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
+    @Column(nullable = false)
     val name: String = "",
     val established: String = "",
     @Column(columnDefinition = "TEXT")
